@@ -3,16 +3,19 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import UserRoutes from "./routes/User.js";
+import BlogRoutes from "./routes/Blog.js"; // NEW
 
 dotenv.config();
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true })); // for form data
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/user/", UserRoutes);
-// error handler
+app.use("/api/blog/", BlogRoutes); // NEW
+
 app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || "Something went wrong";
@@ -25,14 +28,14 @@ app.use((err, req, res, next) => {
 
 app.get("/", async (req, res) => {
   res.status(200).json({
-    message: "Hello developers from GFG",
+    message: "Hello developers from tiwary",
   });
 });
 
 const connectDB = () => {
   mongoose.set("strictQuery", true);
   mongoose
-    .connect(process.env.MONGODB_URL)
+    .connect(process.env.MONGO_URI)
     .then(() => console.log("Connected to Mongo DB"))
     .catch((err) => {
       console.error("failed to connect with mongo");

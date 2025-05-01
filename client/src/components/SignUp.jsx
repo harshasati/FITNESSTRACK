@@ -13,11 +13,13 @@ const Container = styled.div`
   flex-direction: column;
   gap: 36px;
 `;
+
 const Title = styled.div`
   font-size: 30px;
   font-weight: 800;
   color: ${({ theme }) => theme.text_primary};
 `;
+
 const Span = styled.div`
   font-size: 16px;
   font-weight: 400;
@@ -41,23 +43,32 @@ const SignUp = () => {
   };
 
   const handelSignUp = async () => {
+    if (!validateInputs()) return;
+
     setLoading(true);
     setButtonDisabled(true);
-    if (validateInputs()) {
-      await UserSignUp({ name, email, password })
-        .then((res) => {
-          dispatch(loginSuccess(res.data));
-          alert("Account Created Success");
-          setLoading(false);
-          setButtonDisabled(false);
-        })
-        .catch((err) => {
-          alert(err.response.data.message);
-          setLoading(false);
-          setButtonDisabled(false);
-        });
+
+    try {
+      console.log("Submitting SignUp Data:", { name, email, password });
+      const res = await UserSignUp({ name, email, password });
+
+      if (res) {
+        console.log("Signup Successful, API Response:", res);
+        dispatch(loginSuccess(res));
+        alert("Account Created Successfully!");
+      } else {
+        console.error("Invalid response from server:", res);
+        alert("Unexpected response. Please try again.");
+      }
+    } catch (err) {
+      console.error("Signup Error:", err);
+      alert(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+      setButtonDisabled(false);
     }
   };
+
   return (
     <Container>
       <div>

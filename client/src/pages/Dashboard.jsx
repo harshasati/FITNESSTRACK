@@ -47,7 +47,6 @@ const Section = styled.div`
   flex-direction: column;
   padding: 0px 16px;
   gap: 22px;
-  padding: 0px 16px;
   @media (max-width: 600px) {
     gap: 12px;
   }
@@ -77,47 +76,57 @@ const Dashboard = () => {
   const dashboardData = async () => {
     setLoading(true);
     const token = localStorage.getItem("fittrack-app-token");
-    await getDashboardDetails(token).then((res) => {
+    try {
+      const res = await getDashboardDetails(token);
       setData(res.data);
       console.log(res.data);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error.response?.data || error.message);
+    } finally {
       setLoading(false);
-    });
+    }
   };
+
   const getTodaysWorkout = async () => {
     setLoading(true);
     const token = localStorage.getItem("fittrack-app-token");
-    await getWorkouts(token, "").then((res) => {
-      setTodaysWorkouts(res?.data?.todaysWorkouts);
+    try {
+      const res = await getWorkouts(token, "");
+      setTodaysWorkouts(res?.data?.todaysWorkouts || []);
       console.log(res.data);
+    } catch (error) {
+      console.error("Error fetching today's workouts:", error.response?.data || error.message);
+    } finally {
       setLoading(false);
-    });
+    }
   };
 
   const addNewWorkout = async () => {
     setButtonLoading(true);
     const token = localStorage.getItem("fittrack-app-token");
-    await addWorkout(token, { workoutString: workout })
-      .then((res) => {
-        dashboardData();
-        getTodaysWorkout();
-        setButtonLoading(false);
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    try {
+      await addWorkout(token, { workoutString: workout });
+      await Promise.all([dashboardData(), getTodaysWorkout()]); // Refresh data
+    } catch (error) {
+      console.error("Error adding workout:", error.response?.data || error.message);
+      alert("Failed to add workout: " + (error.response?.data?.message || error.message));
+    } finally {
+      setButtonLoading(false);
+    }
   };
 
   useEffect(() => {
     dashboardData();
     getTodaysWorkout();
   }, []);
+
   return (
     <Container>
       <Wrapper>
         <Title>Dashboard</Title>
         <FlexWrap>
           {counts.map((item) => (
-            <CountsCard item={item} data={data} />
+            <CountsCard item={item} data={data} key={item.id} />
           ))}
         </FlexWrap>
 
@@ -133,10 +142,10 @@ const Dashboard = () => {
         </FlexWrap>
 
         <Section>
-          <Title>Todays Workouts</Title>
+          <Title>Today's Workouts</Title>
           <CardWrapper>
-            {todaysWorkouts.map((workout) => (
-              <WorkoutCard workout={workout} />
+            {todaysWorkouts.map((workout, index) => (
+              <WorkoutCard workout={workout} key={index} />
             ))}
           </CardWrapper>
         </Section>
