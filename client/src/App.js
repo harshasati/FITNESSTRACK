@@ -10,6 +10,7 @@ import Workouts from "./pages/Workouts";
 import Tutorial from "./pages/Tutorial";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
+import AIChatbot from "./components/AIChatbot";
 
 const Container = styled.div`
   width: 100%;
@@ -44,6 +45,9 @@ function App() {
             <Authentication />
           </Container>
         )}
+
+        {/* Floating AI Chatbot */}
+        <AIChatbot />
       </BrowserRouter>
     </ThemeProvider>
   );

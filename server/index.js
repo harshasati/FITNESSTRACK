@@ -4,7 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import UserRoutes from "./routes/User.js";
 import BlogRoutes from "./routes/Blog.js"; // NEW
-
+import aiChat from "./routes/aiChat.js";
 dotenv.config();
 //console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
@@ -12,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use("/api/ai", aiChat);
 
 app.use("/api/user/", UserRoutes);
 app.use("/api/blog/", BlogRoutes); // NEW
