@@ -12,7 +12,7 @@ function Blog() {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/api/blog/create", {
+      const res = await fetch("https://fitnesstrack-kkok.onrender.com/api/blog/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
