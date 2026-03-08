@@ -6,7 +6,7 @@ import UserRoutes from "./routes/User.js";
 import BlogRoutes from "./routes/Blog.js"; // NEW
 
 dotenv.config();
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
+//console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const app = express();
 app.use(cors());
@@ -46,7 +46,8 @@ const connectDB = () => {
 const startServer = async () => {
   try {
     connectDB();
-    app.listen(8080, () => console.log("Server started on port 8080"));
+    const PORT = process.env.PORT || 8080;
+    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
   } catch (error) {
     console.log(error);
   }
