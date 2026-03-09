@@ -20,7 +20,7 @@ const Container = styled.div`
   background: ${({ theme }) => theme.bg};
   color: ${({ theme }) => theme.text_primary};
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   transition: all 0.2s ease;
 `;
 

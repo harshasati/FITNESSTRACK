@@ -46,7 +46,7 @@ function AIChatbot() {
           borderRadius: "50%",
           fontSize: "22px",
           cursor: "pointer",
-          zIndex: 1000,
+          zIndex: 99999,
         }}
         onClick={() => setOpen(!open)}
       >
