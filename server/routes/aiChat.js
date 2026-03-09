@@ -14,7 +14,7 @@ router.post("/chat", async (req, res) => {
     console.log("Gemini key:", process.env.GEMINI_API_KEY);
 
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash-latest",
+      model: "gemini-pro",
     });
 
     const result = await model.generateContent(message);
